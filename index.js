@@ -112,34 +112,33 @@ const Controller = ((view, model) => {
     }
 
     const handleUpdate = () => {
+        //  let flag = 0
         view.listsEl.addEventListener('click', (event) => {
             if (event.target.className === "update-btn") {
                 const liEl = event.target.parentNode
                 const id = event.target.parentNode.id
-                // const spanEl = document.querySelector(`.${id}`)
-                // console.log('span', spanEl)
-                const spanValue = liEl.children[0].innerHTML
-                // for (let i = 0; i < liEl.children.length; i++) {
-                //     if (liEl.children === "SPAN") { }//???
-                // }
-                const input = document.createElement('input')
-                input.value = spanValue
-                liEl.children[0].remove()
-                liEl.appendChild(input)
-                // liEl.children[0].replaceWith(input)
-
-                console.log(input.value)
-
-                //  const updateTodo={content: input.value }
-                model.updateContent(+id).then(data => {
-                    state.todos = state.todos.map(todo => {
-                        if (todo.id === + id) {
-                            todo.content = ''// New input.value
-                        }
-                        return todo
+                const spanEl = liEl.getElementsByTagName('span')[0]
+                if (spanEl) {
+                    const input = document.createElement('input')
+                    input.value = spanEl.innerHTML
+                    // liEl.children[0].remove()
+                    // liEl.appendChild(input)
+                    spanEl.replaceWith(input)
+                } else {// 2 clicks?
+                    event.target.addEventListener('click', (event) => {
+                        const input = liEl.getElementsByTagName('input')[0]
+                        const updateTodo = { content: input.value }
+                        model.updateContent(+id, updateTodo).then(data => {
+                            state.todos = state.todos.map(todo => {
+                                if (todo.id === + id) {
+                                    todo.content = input.value// New input.value
+                                }
+                                return todo
+                            })
+                            // console.log('inside undateContent', state.todos)
+                        })
                     })
-                    // console.log('inside undateContent', state.todos)
-                })
+                }
             }
         })
     }
