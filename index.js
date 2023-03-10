@@ -1,4 +1,20 @@
 
+function myFetch (url, method) {
+    return new Promise((res, rej) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open(method || "GET", url)
+        xhr.responseType = "json"
+        xhr.onload = function () {
+            res(xhr.response)
+        }
+        xhr.onerror = function () {
+            rej("error")
+        }
+        xhr.send()
+    })
+}
+
+
 const APIs = (() => {
     const createTodo = (newTodo) => {
         return fetch("http://localhost:3000/todos", {
@@ -15,7 +31,8 @@ const APIs = (() => {
     }
 
     const getTodos = () => {
-        return fetch("http://localhost:3000/todos").then((res) => res.json())
+        return myFetch("http://localhost:3000/todos/")
+
     }
     const updateIsDone = (id, updateTodo) => {
         return fetch("http://localhost:3000/todos/" + id, {
