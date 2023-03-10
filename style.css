@@ -19,14 +19,16 @@ html {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  justify-content: center;
 }
 .lists {
   display: flex;
 }
 
-.todo-list .done-list {
+.todo-list,
+.done-list {
   padding: 0;
-  margin: 0;
+  margin: 0 10px;
   display: flex;
   flex-direction: column;
   list-style-type: none;
