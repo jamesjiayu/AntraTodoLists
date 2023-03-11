@@ -1,5 +1,5 @@
 
-function myFetch (url, method) {
+function myFetch (url, method, data) {
     return new Promise((res, rej) => {
         const xhr = new XMLHttpRequest()
         xhr.open(method || "GET", url)
@@ -10,43 +10,44 @@ function myFetch (url, method) {
         xhr.onerror = function () {
             rej("error")
         }
-        xhr.send()
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.send(JSON.stringify(data))
     })
 }
-
-
 const APIs = (() => {
     const createTodo = (newTodo) => {
-        return fetch("http://localhost:3000/todos", {
-            method: "POST",
-            body: JSON.stringify(newTodo),
-            headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json())
+        return myFetch("http://localhost:3000/todos", 'POST', newTodo)
+        // return fetch("http://localhost:3000/todos", {
+        //     method: "POST",
+        //     body: JSON.stringify(newTodo),
+        //     headers: { "Content-Type": "application/json" },
+        // }).then((res) => res.json())
     }
-
     const deleteTodo = (id) => {
-        return fetch("http://localhost:3000/todos/" + id, {
-            method: "DELETE",
-        }).then((res) => res.json())
+        return myFetch("http://localhost:3000/todos/" + id, "DELETE")
+        // return fetch("http://localhost:3000/todos/" + id, {
+        //     method: "DELETE",
+        // }).then((res) => res.json())
     }
-
     const getTodos = () => {
         return myFetch("http://localhost:3000/todos/")
 
     }
     const updateIsDone = (id, updateTodo) => {
-        return fetch("http://localhost:3000/todos/" + id, {
-            method: "PATCH",
-            body: JSON.stringify(updateTodo),
-            headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json())
+        return myFetch("http://localhost:3000/todos/" + id, "PATCH", updateTodo)
+        // return fetch("http://localhost:3000/todos/" + id, {
+        //     method: "PATCH",
+        //     body: JSON.stringify(updateTodo),
+        //     headers: { "Content-Type": "application/json" },
+        // }).then((res) => res.json())
     }
     const updateContent = (id, updateTodo) => {
-        return fetch("http://localhost:3000/todos/" + id, {
-            method: "PATCH",
-            body: JSON.stringify(updateTodo),
-            headers: { "Content-Type": "application/json" },
-        }).then((res) => res.json())
+        return myFetch("http://localhost:3000/todos/" + id, "PATCH", updateTodo)
+        // return fetch("http://localhost:3000/todos/" + id, {
+        //     method: "PATCH",
+        //     body: JSON.stringify(updateTodo),
+        //     headers: { "Content-Type": "application/json" },
+        // }).then((res) => res.json())
     }
     return { createTodo, deleteTodo, getTodos, updateIsDone, updateContent }
 })()
